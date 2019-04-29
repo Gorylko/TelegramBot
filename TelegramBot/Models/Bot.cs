@@ -27,7 +27,8 @@ namespace TelegramBot.Models
             //TODO: Add mode commands
 
             client = new TelegramBotClient(AppSettings.Key);
-            await client.SetWebhookAsync("");
+            var hook = string.Format(AppSettings.Url, "api/message/update");
+            await client.SetWebhookAsync(hook);
             return client;
         }
     }

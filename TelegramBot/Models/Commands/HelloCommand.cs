@@ -9,7 +9,7 @@ namespace TelegramBot.Models.Commands
 {
     public class HelloCommand : Command
     {
-        public override string Name => "Hello";
+        public override string Name => "hello";
 
         public override async void Execute(Message message, TelegramBotClient client)
         {
@@ -18,7 +18,7 @@ namespace TelegramBot.Models.Commands
 
             //Bot logic there
 
-            await client.SendTextMessageAsync(0, "Hello!", replyToMessageId: 0);
+            await client.SendTextMessageAsync(chatId, "Саня хуй соси", replyToMessageId: messageId);
         }
     }
 }

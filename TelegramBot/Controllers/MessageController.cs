@@ -9,27 +9,28 @@ using System.Web.Http.Results;
 using Telegram.Bot.Types;
 using TelegramBot.Models;
 
-namespace TelegramBot.Controllers
+namespace TelegramBotApp.Controllers
 {
-    [Route(@"api/message/update")]
     public class MessageController : ApiController
     {
-        public async Task<OkResult> Update([FromBody]Update update) //webhook uri part
+        [Route(@"api/message/update")] //webhook uri part
+        public async Task<OkResult> Update([FromBody]Update update)
         {
             var commands = Bot.Commands;
-            var message  = update.Message;
-            var client   = await Bot.Get();
+            var message = update.Message;
+            var client = await Bot.Get();
 
             foreach (var command in commands)
             {
-                if(command.Contains(message.Text))
+                if (command.Contains(message.Text))
                 {
                     command.Execute(message, client);
                     break;
                 }
             }
 
-                return Ok();
+            return Ok();
         }
+
     }
 }
