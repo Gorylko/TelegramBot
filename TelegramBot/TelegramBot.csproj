@@ -166,6 +166,7 @@
     <None Include="packages.config" />
     <None Include="Properties\PublishProfiles\TelegramBotyara - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\telegrambotyara - Web Deploy1.pubxml" />
+    <None Include="Properties\PublishProfiles\telegrambotyara - Web Deploy2.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
