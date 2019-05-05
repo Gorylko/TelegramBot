@@ -24,6 +24,7 @@ namespace TelegramBot.Models
 
             commandList = new List<Command>();
             commandList.Add(new HelloCommand());
+            commandList.Add(new ScheduleCommand());
             //TODO: Add mode commands
 
             client = new TelegramBotClient(AppSettings.Key);
