@@ -843,7 +843,7 @@
             </summary>
             <param name="chatId"><see cref="T:Telegram.Bot.Types.ChatId"/> for the target chat</param>
             <param name="audio">Audio file to send.</param>
-            <param name="caption">Audio caption, 0-200 characters</param>
+            <param name="caption">Audio caption, 0-1024 characters</param>
             <param name="parseMode">Change, if you want Telegram apps to show bold, italic, fixed-width text or inline
             URLs in your bot's message.</param>
             <param name="duration">Duration of the audio in seconds</param>
@@ -958,7 +958,7 @@
             </summary>
             <param name="chatId"><see cref="T:Telegram.Bot.Types.ChatId"/> for the target chat</param>
             <param name="voice">Audio file to send.</param>
-            <param name="caption">Voice message caption, 0-200 characters</param>
+            <param name="caption">Voice message caption, 0-1024 characters</param>
             <param name="parseMode">Change, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in your bot's message.</param>
             <param name="duration">Duration of sent audio in seconds</param>
             <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param>
@@ -1067,7 +1067,7 @@
             <returns>On success, the sent Description is returned.</returns>
             <see href="https://core.telegram.org/bots/api#sendcontact"/>
         </member>
-        <member name="M:Telegram.Bot.ITelegramBotClient.SendPollAsync(Telegram.Bot.Types.ChatId,System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.IReplyMarkup,System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.ITelegramBotClient.SendPollAsync(Telegram.Bot.Types.ChatId,System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.IReplyMarkup,System.Threading.CancellationToken,System.Nullable{System.Boolean},System.Nullable{Telegram.Bot.Types.Enums.PollType},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Boolean})">
             <summary>
             Use this method to send a native poll. A native poll can't be sent to a private chat. On success, the sent <see cref="T:Telegram.Bot.Types.Message"/> is returned.
             </summary>
@@ -1078,6 +1078,11 @@
             <param name="replyToMessageId">If the message is a reply, ID of the original message</param>
             <param name="replyMarkup">Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to hide keyboard or to force a reply from the user.</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <param name="isAnonymous">True, if the poll needs to be anonymous, defaults to True</param>
+            <param name="type">Poll type, “quiz” or “regular”, defaults to “regular”</param>
+            <param name="allowsMultipleAnswers">True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False</param>
+            <param name="correctOptionId">0-based identifier of the correct answer option, required for polls in quiz mode</param>
+            <param name="isClosed">Pass True, if the poll needs to be immediately closed</param>
             <returns>On success, the sent <see cref="T:Telegram.Bot.Types.Message"/> is returned.</returns>
             <see href="https://core.telegram.org/bots/api#sendpoll"/>
         </member>
@@ -1223,17 +1228,14 @@
             </remarks>
             <see href="https://core.telegram.org/bots/api#answercallbackquery"/>
         </member>
-        <member name="M:Telegram.Bot.ITelegramBotClient.RestrictChatMemberAsync(Telegram.Bot.Types.ChatId,System.Int32,System.DateTime,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.ITelegramBotClient.RestrictChatMemberAsync(Telegram.Bot.Types.ChatId,System.Int32,Telegram.Bot.Types.ChatPermissions,System.DateTime,System.Threading.CancellationToken)">
             <summary>
             Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate admin rights.
             </summary>
             <param name="chatId">Unique identifier for the target chat or username of the target supergroup</param>
             <param name="userId">Unique identifier of the target user</param>
+            <param name="permissions">New user permissions</param>
             <param name="untilDate"><see cref="T:System.DateTime"/> when restrictions will be lifted for the user. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever</param>
-            <param name="canSendMessages">Pass True, if the user can send text messages, contacts, locations and venues</param>
-            <param name="canSendMediaMessages">Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages</param>
-            <param name="canSendOtherMessages">Pass True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages</param>
-            <param name="canAddWebPagePreviews">Pass True, if the user may add web page previews to their messages, implies can_send_media_messages</param>
             <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
             <returns>On success, <c>true</c> is returned</returns>
             <remarks>Pass True for all boolean parameters to lift restrictions from a user.</remarks>
@@ -1257,6 +1259,26 @@
             <returns>Returns True on success.</returns>
             <remarks>Pass False for all boolean parameters to demote a user.</remarks>
             <see href="https://core.telegram.org/bots/api#promotechatmember"/>
+        </member>
+        <member name="M:Telegram.Bot.ITelegramBotClient.SetChatAdministratorCustomTitleAsync(Telegram.Bot.Types.ChatId,System.Int32,System.String,System.Threading.CancellationToken)">
+            <summary>
+            <inheritdoc cref="T:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest"/>
+            </summary>
+            <param name="chatId">Unique identifier for the target chat or username of the target channel</param>
+            <param name="userId">Unique identifier of the target user</param>
+            <param name="customTitle">New custom title for the administrator; 0-16 characters, emoji are not allowed</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>Returns True on success.</returns>
+            <see href="https://core.telegram.org/bots/api#setchatadministratorcustomtitle"/>
+        </member>
+        <member name="M:Telegram.Bot.ITelegramBotClient.SetChatPermissionsAsync(Telegram.Bot.Types.ChatId,Telegram.Bot.Types.ChatPermissions,System.Threading.CancellationToken)">
+            <summary>
+            Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members admin rights. Returns True on success.
+            </summary>
+            <param name="chatId">Unique identifier for the target chat or username of the target channel</param>
+            <param name="permissions">New default permissions</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns><c>true</c> on success.</returns>
         </member>
         <member name="M:Telegram.Bot.ITelegramBotClient.EditMessageTextAsync(Telegram.Bot.Types.ChatId,System.Int32,System.String,Telegram.Bot.Types.Enums.ParseMode,System.Boolean,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken)">
             <summary>
@@ -1436,7 +1458,7 @@
             <returns>On success, <c>true</c> is returned.</returns>
             <see href="https://core.telegram.org/bots/api#answerinlinequery"/>
         </member>
-        <member name="M:Telegram.Bot.ITelegramBotClient.SendInvoiceAsync(System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Payments.LabeledPrice},System.String,System.String,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.ITelegramBotClient.SendInvoiceAsync(System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Payments.LabeledPrice},System.String,System.String,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken,System.Boolean,System.Boolean)">
             <summary>
             Use this method to send invoices.
             </summary>
@@ -1457,6 +1479,8 @@
             <param name="needPhoneNumber">Pass True, if you require the user's phone number to complete the order</param>
             <param name="needEmail">Pass True, if you require the user's email to complete the order</param>
             <param name="needShippingAddress">Pass True, if you require the user's shipping address to complete the order</param>
+            <param name="sendPhoneNumberToProvider">Pass True, if user's phone number should be sent to provider</param>
+            <param name="sendEmailToProvider">Pass True, if user's email address should be sent to provider</param>
             <param name="isFlexible">Pass True, if the final price depends on the shipping method</param>
             <param name="disableNotification">Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.</param>
             <param name="replyToMessageId">If the message is a reply, ID of the original message</param>
@@ -2014,32 +2038,41 @@
             Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever.
             </summary>
         </member>
-        <member name="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendMessages">
+        <member name="M:Telegram.Bot.Requests.RestrictChatMemberRequest.#ctor(Telegram.Bot.Types.ChatId,System.Int32,Telegram.Bot.Types.ChatPermissions)">
             <summary>
-            Pass True, if the user can send text messages, contacts, locations and venues
-            </summary>
-        </member>
-        <member name="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendMediaMessages">
-            <summary>
-            Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies <see cref="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendMessages"/>
-            </summary>
-        </member>
-        <member name="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendOtherMessages">
-            <summary>
-            Pass True, if the user can send animations, games, stickers and use inline bots, implies <see cref="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendMediaMessages"/>
-            </summary>
-        </member>
-        <member name="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanAddWebPagePreviews">
-            <summary>
-            Pass True, if the user may add web page previews to their messages, implies <see cref="P:Telegram.Bot.Requests.RestrictChatMemberRequest.CanSendMediaMessages"/>
-            </summary>
-        </member>
-        <member name="M:Telegram.Bot.Requests.RestrictChatMemberRequest.#ctor(Telegram.Bot.Types.ChatId,System.Int32)">
-            <summary>
-            Initializes a new request with chatId and userId
+            Initializes a new request with chatId, userId and new user permissions
             </summary>
             <param name="chatId">Unique identifier for the target chat or username of the target supergroup</param>
             <param name="userId">Unique identifier of the target user</param>
+            <param name="permissions">New user permissions</param>
+        </member>
+        <member name="T:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest">
+            <summary>
+            Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest.ChatId">
+            <summary>
+            Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest.UserId">
+            <summary>
+            Unique identifier of the target user
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest.CustomTitle">
+            <summary>
+            New custom title for the administrator; 0-16 characters, emoji are not allowed
+            </summary>
+        </member>
+        <member name="M:Telegram.Bot.Requests.SetChatAdministratorCustomTitleRequest.#ctor(Telegram.Bot.Types.ChatId,System.Int32,System.String)">
+            <summary>
+            Initializes a new request with chatId and new title
+            </summary>
+            <param name="chatId">Unique identifier for the target chat or username of the target channel</param>
+            <param name="userId">Unique identifier of the target user</param>
+            <param name="customTitle">New custom title for the administrator; 0-16 characters, emoji are not allowed</param>
         </member>
         <member name="T:Telegram.Bot.Requests.SetChatDescriptionRequest">
             <summary>
@@ -2062,6 +2095,28 @@
             </summary>
             <param name="chatId">Unique identifier for the target chat or username of the target channel</param>
             <param name="description">New chat Description, 0-255 characters</param>
+        </member>
+        <member name="T:Telegram.Bot.Requests.SetChatPermissionsRequest">
+            <summary>
+            Use this method to set default chat permissions for all members. The bot must be an administrator in the group or a supergroup for this to work and must have the can_restrict_members admin rights. Returns True on success.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SetChatPermissionsRequest.ChatId">
+            <summary>
+            Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SetChatPermissionsRequest.Permissions">
+            <summary>
+            New default chat permissions
+            </summary>
+        </member>
+        <member name="M:Telegram.Bot.Requests.SetChatPermissionsRequest.#ctor(Telegram.Bot.Types.ChatId,Telegram.Bot.Types.ChatPermissions)">
+            <summary>
+            Initializes a new request with chatId and new default permissions
+            </summary>
+            <param name="chatId">Unique identifier for the target chat or username of the target channel</param>
+            <param name="permissions">New default permissions</param>
         </member>
         <member name="T:Telegram.Bot.Requests.SetChatPhotoRequest">
             <summary>
@@ -2578,7 +2633,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendAnimationRequest.Caption">
             <summary>
-            Video caption (may also be used when resending videos by file_id), 0-200 characters
+            Video caption (may also be used when resending videos by file_id), 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendAnimationRequest.ParseMode">
@@ -2620,7 +2675,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendAudioRequest.Caption">
             <summary>
-            Photo caption (may also be used when resending photos by file_id), 0-200 characters
+            Photo caption (may also be used when resending photos by file_id), 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendAudioRequest.ParseMode">
@@ -2727,7 +2782,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendDocumentRequest.Caption">
             <summary>
-            Photo caption (may also be used when resending photos by file_id), 0-200 characters
+            Photo caption (may also be used when resending photos by file_id), 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendDocumentRequest.Thumb">
@@ -2849,7 +2904,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendPhotoRequest.Caption">
             <summary>
-            Photo caption (may also be used when resending photos by file_id), 0-200 characters
+            Photo caption (may also be used when resending photos by file_id), 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendPhotoRequest.ParseMode">
@@ -2892,6 +2947,31 @@
         <member name="P:Telegram.Bot.Requests.SendPollRequest.Options">
             <summary>
             List of answer options, 2-10 strings 1-100 characters each
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendPollRequest.IsAnonymous">
+            <summary>
+            Optional. True, if the poll needs to be anonymous, defaults to True
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendPollRequest.Type">
+            <summary>
+            Optional. Poll type, <see cref="F:Telegram.Bot.Types.Enums.PollType.Quiz"/> or <see cref="F:Telegram.Bot.Types.Enums.PollType.Regular"/>, defaults to <see cref="F:Telegram.Bot.Types.Enums.PollType.Regular"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendPollRequest.AllowsMultipleAnswers">
+            <summary>
+            Optional. True, if the poll allows multiple answers, ignored for polls in quiz mode, defaults to False
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendPollRequest.CorrectOptionId">
+            <summary>
+            Optional. 0-based identifier of the correct answer option, required for polls in quiz mode
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendPollRequest.IsClosed">
+            <summary>
+            Optional. Pass True, if the poll needs to be immediately closed
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendPollRequest.DisableNotification">
@@ -3050,7 +3130,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendVideoRequest.Caption">
             <summary>
-            Video caption (may also be used when resending videos by file_id), 0-200 characters
+            Video caption (may also be used when resending videos by file_id), 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendVideoRequest.ParseMode">
@@ -3105,7 +3185,7 @@
         </member>
         <member name="P:Telegram.Bot.Requests.SendVoiceRequest.Caption">
             <summary>
-            Voice message caption, 0-200 characters
+            Voice message caption, 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Requests.SendVoiceRequest.ParseMode">
@@ -3649,6 +3729,16 @@
             Pass True, if you require the user's shipping address to complete the order
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Requests.SendInvoiceRequest.SendPhoneNumberToProvider">
+            <summary>
+            Pass True, if user's phone number should be sent to provider
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.SendInvoiceRequest.SendEmailToProvider">
+            <summary>
+            Pass True, if user's email address should be sent to provider
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Requests.SendInvoiceRequest.IsFlexible">
             <summary>
             Pass True, if you require the user's email to complete the order
@@ -3708,6 +3798,17 @@
             Generate content of HTTP message
             </summary>
             <returns>Content of HTTP request</returns>
+        </member>
+        <member name="P:Telegram.Bot.Requests.RequestBase`1.IsWebhookResponse">
+            <summary>
+            Allows this object to be used as a response in webhooks
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Requests.RequestBase`1.WebHookMethodName">
+            <summary>
+            If <see cref="P:Telegram.Bot.Requests.RequestBase`1.IsWebhookResponse"/> is set to <see langword="true"/> is set to the method
+            name, otherwise it won't be serialized
+            </summary>
         </member>
         <member name="T:Telegram.Bot.Requests.AddStickerToSetRequest">
             <summary>
@@ -4374,7 +4475,7 @@
         <member name="M:Telegram.Bot.TelegramBotClient.SendContactAsync(Telegram.Bot.Types.ChatId,System.String,System.String,System.String,System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.IReplyMarkup,System.Threading.CancellationToken,System.String)">
             <inheritdoc />
         </member>
-        <member name="M:Telegram.Bot.TelegramBotClient.SendPollAsync(Telegram.Bot.Types.ChatId,System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.IReplyMarkup,System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.TelegramBotClient.SendPollAsync(Telegram.Bot.Types.ChatId,System.String,System.Collections.Generic.IEnumerable{System.String},System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.IReplyMarkup,System.Threading.CancellationToken,System.Nullable{System.Boolean},System.Nullable{Telegram.Bot.Types.Enums.PollType},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Boolean})">
             <inheritdoc />
         </member>
         <member name="M:Telegram.Bot.TelegramBotClient.SendChatActionAsync(Telegram.Bot.Types.ChatId,Telegram.Bot.Types.Enums.ChatAction,System.Threading.CancellationToken)">
@@ -4419,10 +4520,16 @@
         <member name="M:Telegram.Bot.TelegramBotClient.AnswerCallbackQueryAsync(System.String,System.String,System.Boolean,System.String,System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Telegram.Bot.TelegramBotClient.RestrictChatMemberAsync(Telegram.Bot.Types.ChatId,System.Int32,System.DateTime,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.TelegramBotClient.RestrictChatMemberAsync(Telegram.Bot.Types.ChatId,System.Int32,Telegram.Bot.Types.ChatPermissions,System.DateTime,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Telegram.Bot.TelegramBotClient.PromoteChatMemberAsync(Telegram.Bot.Types.ChatId,System.Int32,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Telegram.Bot.TelegramBotClient.SetChatAdministratorCustomTitleAsync(Telegram.Bot.Types.ChatId,System.Int32,System.String,System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Telegram.Bot.TelegramBotClient.SetChatPermissionsAsync(Telegram.Bot.Types.ChatId,Telegram.Bot.Types.ChatPermissions,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Telegram.Bot.TelegramBotClient.StopMessageLiveLocationAsync(Telegram.Bot.Types.ChatId,System.Int32,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken)">
@@ -4470,7 +4577,7 @@
         <member name="M:Telegram.Bot.TelegramBotClient.AnswerInlineQueryAsync(System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.InlineQueryResults.InlineQueryResultBase},System.Nullable{System.Int32},System.Boolean,System.String,System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Telegram.Bot.TelegramBotClient.SendInvoiceAsync(System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Payments.LabeledPrice},System.String,System.String,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken)">
+        <member name="M:Telegram.Bot.TelegramBotClient.SendInvoiceAsync(System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Payments.LabeledPrice},System.String,System.String,System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup,System.Threading.CancellationToken,System.Boolean,System.Boolean)">
             <inheritdoc />
         </member>
         <member name="M:Telegram.Bot.TelegramBotClient.AnswerShippingQueryAsync(System.String,System.Collections.Generic.IEnumerable{Telegram.Bot.Types.Payments.ShippingOption},System.Threading.CancellationToken)">
@@ -4552,7 +4659,12 @@
         </member>
         <member name="P:Telegram.Bot.Types.Animation.FileId">
             <summary>
-            Unique file identifier.
+            Identifier for this file, which can be used to download or reuse the file
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Animation.FileUniqueId">
+            <summary>
+            Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.Animation.Width">
@@ -4764,6 +4876,16 @@
             Optional. Pinned message, for supergroups. Returned only in getChat.
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.Chat.Permissions">
+            <summary>
+            Optional. Pinned message, for groups, supergroups and channels. Returned only in getChat.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Chat.SlowModeDelay">
+            <summary>
+            Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user. Returned only in getChat.
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.Chat.StickerSetName">
             <summary>
             Optional. For supergroups, name of group sticker set. Returned only in getChat.
@@ -4871,6 +4993,11 @@
             The member's status in the chat.
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.ChatMember.CustomTitle">
+            <summary>
+            Optional. Owner and administrators only. Custom title for this user
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.ChatMember.UntilDate">
             <summary>
             Optional. Restricted and kicked only. Date when restrictions will be lifted for this user, UTC time
@@ -4936,6 +5063,11 @@
             Optional. Restricted only. True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies <see cref="P:Telegram.Bot.Types.ChatMember.CanSendMessages"/>
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.ChatMember.CanSendPolls">
+            <summary>
+            Optional. Restricted only. True, if the user is allowed to send polls
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.ChatMember.CanSendOtherMessages">
             <summary>
             Optional. Restricted only. True, if the user can send animations, games, stickers and use inline bots, implies <see cref="P:Telegram.Bot.Types.ChatMember.CanSendMediaMessages"/>
@@ -4944,6 +5076,51 @@
         <member name="P:Telegram.Bot.Types.ChatMember.CanAddWebPagePreviews">
             <summary>
             Optional. Restricted only. True, if user may add web page previews to his messages, implies <see cref="P:Telegram.Bot.Types.ChatMember.CanSendMediaMessages"/>
+            </summary>
+        </member>
+        <member name="T:Telegram.Bot.Types.ChatPermissions">
+            <summary>
+            Describes actions that a non-administrator user is allowed to take in a chat.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanSendMessages">
+            <summary>
+            Optional. True, if the user is allowed to send text messages, contacts, locations and venues
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanSendMediaMessages">
+            <summary>
+            Optional. True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies <see cref="P:Telegram.Bot.Types.ChatPermissions.CanSendMessages"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanSendPolls">
+            <summary>
+            Optional. True, if the user is allowed to send polls, implies <see cref="P:Telegram.Bot.Types.ChatPermissions.CanSendMessages"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanSendOtherMessages">
+            <summary>
+            Optional. True, if the user is allowed to send animations, games, stickers and use inline bots, implies <see cref="P:Telegram.Bot.Types.ChatPermissions.CanSendMediaMessages"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanAddWebPagePreviews">
+            <summary>
+            Optional. True, if the user is allowed to add web page previews to their messages, implies <see cref="P:Telegram.Bot.Types.ChatPermissions.CanSendMediaMessages"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanChangeInfo">
+            <summary>
+            Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanInviteUsers">
+            <summary>
+            Optional. True, if the user is allowed to invite new users to the chat
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPermissions.CanPinMessages">
+            <summary>
+            Optional. True, if the user is allowed to pin messages. Ignored in public supergroups
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.ChatPhoto">
@@ -4956,9 +5133,19 @@
             File id of the big version of this <see cref="T:Telegram.Bot.Types.ChatPhoto"/>
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.ChatPhoto.BigFileUniqueId">
+            <summary>
+            Unique file identifier of big (640x640) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.ChatPhoto.SmallFileId">
             <summary>
             File id of the small version of this <see cref="T:Telegram.Bot.Types.ChatPhoto"/>
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ChatPhoto.SmallFileUniqueId">
+            <summary>
+            Unique file identifier of small (160x160) chat photo, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.ChosenInlineResult">
@@ -5276,6 +5463,16 @@
             Unknown entity type
             </summary>
         </member>
+        <member name="F:Telegram.Bot.Types.Enums.MessageEntityType.Underline">
+            <summary>
+            Underlined text
+            </summary>
+        </member>
+        <member name="F:Telegram.Bot.Types.Enums.MessageEntityType.Strikethrough">
+            <summary>
+            Strikethrough text
+            </summary>
+        </member>
         <member name="T:Telegram.Bot.Types.Enums.MessageType">
             <summary>
             The type of a <see cref="T:Telegram.Bot.Types.Message"/>
@@ -5442,12 +5639,36 @@
         </member>
         <member name="F:Telegram.Bot.Types.Enums.ParseMode.Markdown">
             <summary>
-            <see cref="P:Telegram.Bot.Types.Message.Text"/> is formated in Markdown
+            <see cref="P:Telegram.Bot.Types.Message.Text"/> is formatted in Markdown
             </summary>
         </member>
         <member name="F:Telegram.Bot.Types.Enums.ParseMode.Html">
             <summary>
-            <see cref="P:Telegram.Bot.Types.Message.Text"/> is formated in HTML
+            <see cref="P:Telegram.Bot.Types.Message.Text"/> is formatted in HTML
+            </summary>
+        </member>
+        <member name="F:Telegram.Bot.Types.Enums.ParseMode.MarkdownV2">
+            <summary>
+            <see cref="P:Telegram.Bot.Types.Message.Text"/> is formatted in MarkdownV2
+            </summary>
+        </member>
+        <member name="T:Telegram.Bot.Types.Enums.PollType">
+            <summary>
+            <see cref="T:Telegram.Bot.Types.Poll"/> type
+            <remarks>
+            This enum is used only in the library APIs and is not present in types that are coming from
+            Telegram servers for compatibility reasons
+            </remarks>
+            </summary>
+        </member>
+        <member name="F:Telegram.Bot.Types.Enums.PollType.Regular">
+            <summary>
+            Regular poll
+            </summary>
+        </member>
+        <member name="F:Telegram.Bot.Types.Enums.PollType.Quiz">
+            <summary>
+            Quiz
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.Enums.UpdateType">
@@ -5510,6 +5731,11 @@
             The <see cref="T:Telegram.Bot.Types.Update"/> contains an <see cref="F:Telegram.Bot.Types.Enums.UpdateType.Poll"/>
             </summary>
         </member>
+        <member name="F:Telegram.Bot.Types.Enums.UpdateType.PollAnswer">
+            <summary>
+            The <see cref="T:Telegram.Bot.Types.Update"/> contains an <see cref="F:Telegram.Bot.Types.Enums.UpdateType.PollAnswer"/>
+            </summary>
+        </member>
         <member name="T:Telegram.Bot.Types.File">
             <summary>
             This object represents a file ready to be downloaded. The file can be downloaded via <see cref="M:Telegram.Bot.TelegramBotClient.GetFileAsync(System.String,System.Threading.CancellationToken)"/>. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling <see cref="M:Telegram.Bot.TelegramBotClient.GetFileAsync(System.String,System.Threading.CancellationToken)"/>.
@@ -5527,7 +5753,12 @@
         </member>
         <member name="P:Telegram.Bot.Types.FileBase.FileId">
             <summary>
-            Unique identifier for this file
+            Identifier for this file, which can be used to download or reuse the file
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.FileBase.FileUniqueId">
+            <summary>
+            Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.FileBase.FileSize">
@@ -5628,7 +5859,7 @@
         </member>
         <member name="P:Telegram.Bot.Types.InlineQueryResults.Abstractions.ICaptionInlineQueryResult.Caption">
             <summary>
-            Optional. Caption of the result to be sent, 0-200 characters.
+            Optional. Caption of the result to be sent, 0-1024 characters.
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.InlineQueryResults.Abstractions.ICaptionInlineQueryResult.ParseMode">
@@ -6770,7 +7001,7 @@
         </member>
         <member name="P:Telegram.Bot.Types.IInputMedia.Caption">
             <summary>
-            Optional. Caption of the photo to be sent, 0-200 characters
+            Optional. Caption of the photo to be sent, 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.IInputMedia.ParseMode">
@@ -6792,7 +7023,7 @@
         </member>
         <member name="T:Telegram.Bot.Types.InputFiles.InputFileStream">
             <summary>
-            ToDo
+            Used for sending files to Telegram
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.InputFiles.InputFileStream.Content">
@@ -6815,16 +7046,16 @@
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputFileStream.#ctor(System.IO.Stream)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputFileStream"/> from a <see cref="T:System.IO.Stream"/>
             </summary>
-            <param name="content"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputFileStream.#ctor(System.IO.Stream,System.String)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputFileStream"/> from a <see cref="T:System.IO.Stream"/> and a file name
             </summary>
-            <param name="content"></param>
-            <param name="fileName"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
+            <param name="fileName">Name of the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputFileStream.op_Implicit(System.IO.Stream)~Telegram.Bot.Types.InputFiles.InputFileStream">
             <summary>
@@ -6834,7 +7065,7 @@
         </member>
         <member name="T:Telegram.Bot.Types.InputFiles.InputOnlineFile">
             <summary>
-            ToDo
+            Used for sending files to Telegram
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.InputFiles.InputOnlineFile.Url">
@@ -6847,22 +7078,28 @@
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputOnlineFile.#ctor(System.IO.Stream)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputOnlineFile"/> from a <see cref="T:System.IO.Stream"/>
             </summary>
-            <param name="content"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputOnlineFile.#ctor(System.IO.Stream,System.String)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputOnlineFile"/> from a <see cref="T:System.IO.Stream"/> and a file name
             </summary>
-            <param name="content"></param>
-            <param name="fileName"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
+            <param name="fileName">Name of the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputOnlineFile.#ctor(System.String)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputOnlineFile"/> from a string containing a uri or file id
             </summary>
-            <param name="value"></param>
+            <param name="value"><see cref="T:System.String"/> containing a url or file id</param>
+        </member>
+        <member name="M:Telegram.Bot.Types.InputFiles.InputOnlineFile.#ctor(System.Uri)">
+            <summary>
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputOnlineFile"/> from a <see cref="T:System.Uri"/>
+            </summary>
+            <param name="url"><see cref="T:System.Uri"/> pointing to a file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputOnlineFile.op_Implicit(System.IO.Stream)~Telegram.Bot.Types.InputFiles.InputOnlineFile">
             <summary>
@@ -6878,7 +7115,7 @@
         </member>
         <member name="T:Telegram.Bot.Types.InputFiles.InputTelegramFile">
             <summary>
-            ToDo
+            Used for sending files to Telegram
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.InputFiles.InputTelegramFile.FileId">
@@ -6896,22 +7133,22 @@
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputTelegramFile.#ctor(System.IO.Stream)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputTelegramFile"/> from a <see cref="T:System.IO.Stream"/>
             </summary>
-            <param name="content"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputTelegramFile.#ctor(System.IO.Stream,System.String)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputTelegramFile"/> from a <see cref="T:System.IO.Stream"/> and a file name
             </summary>
-            <param name="content"></param>
-            <param name="fileName"></param>
+            <param name="content"><see cref="T:System.IO.Stream"/> containing the file</param>
+            <param name="fileName">Name of the file</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputTelegramFile.#ctor(System.String)">
             <summary>
-            ToDo
+            Constructs an <see cref="T:Telegram.Bot.Types.InputFiles.InputTelegramFile"/> from a file id
             </summary>
-            <param name="fileId"></param>
+            <param name="fileId">File id on Telegram's servers</param>
         </member>
         <member name="M:Telegram.Bot.Types.InputFiles.InputTelegramFile.op_Implicit(System.IO.Stream)~Telegram.Bot.Types.InputFiles.InputTelegramFile">
             <summary>
@@ -7028,7 +7265,7 @@
         </member>
         <member name="P:Telegram.Bot.Types.InputMediaBase.Caption">
             <summary>
-            Optional. Caption of the photo to be sent, 0-200 characters
+            Optional. Caption of the photo to be sent, 0-1024 characters
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.InputMediaBase.ParseMode">
@@ -7115,6 +7352,31 @@
         <member name="P:Telegram.Bot.Types.Location.Latitude">
             <summary>
             Latitude as defined by sender
+            </summary>
+        </member>
+        <member name="T:Telegram.Bot.Types.LoginUrl">
+            <summary>
+            This object represents a parameter of the inline keyboard button used to automatically authorize a user
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.LoginUrl.Url">
+            <summary>
+            An HTTP URL to be opened with user authorization data added to the query string when the button is pressed
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.LoginUrl.ForwardText">
+            <summary>
+            Optional. New text of the button in forwarded messages
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.LoginUrl.BotUsername">
+            <summary>
+            Optional. Username of a bot, which will be used for user authorization
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.LoginUrl.RequestWriteAccess">
+            <summary>
+            Optional. Pass True to request the permission for your bot to send messages to the user
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.MaskPosition">
@@ -7399,6 +7661,11 @@
             Optional. Telegram Passport data
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.Message.ReplyMarkup">
+            <summary>
+            Optional. Inline keyboard attached to the message
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.Message.Type">
             <summary>
             Gets the <see cref="T:Telegram.Bot.Types.Enums.MessageType"/> of the <see cref="T:Telegram.Bot.Types.Message"/>
@@ -7429,12 +7696,17 @@
         </member>
         <member name="P:Telegram.Bot.Types.MessageEntity.Url">
             <summary>
-            Optional. For "text_link" only, url that will be opened after user taps on the text
+            Optional. For <see cref="F:Telegram.Bot.Types.Enums.MessageEntityType.TextLink"/> only, url that will be opened after user taps on the text
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.MessageEntity.User">
             <summary>
-            Optional. For "text_mention" only, the mentioned user (for users without usernames)
+            Optional. For <see cref="F:Telegram.Bot.Types.Enums.MessageEntityType.TextMention"/> only, the mentioned user (for users without usernames)
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.MessageEntity.Language">
+            <summary>
+            Optional. For <see cref="F:Telegram.Bot.Types.Enums.MessageEntityType.Pre"/> only, the programming language of the entity text
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.Passport.EncryptedCredentials">
@@ -7836,9 +8108,54 @@
             List of poll options
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.Poll.TotalVoterCount">
+            <summary>
+            Total number of users that voted in the poll
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.Poll.IsClosed">
             <summary>
             True, if the poll is closed
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Poll.IsAnonymous">
+            <summary>
+            True, if the poll is anonymous
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Poll.Type">
+            <summary>
+            Poll type, currently can be “regular” or “quiz”
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Poll.AllowsMultipleAnswers">
+            <summary>
+            True, if the poll allows multiple answers
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.Poll.CorrectOptionId">
+            <summary>
+            Optional. 0-based identifier of the correct answer option. Available only for polls in the quiz mode, which are closed, or was sent (not forwarded) by the bot or to the private chat with the bot.
+            </summary>
+        </member>
+        <member name="T:Telegram.Bot.Types.PollAnswer">
+            <summary>
+            This object represents an answer of a user in a non-anonymous poll.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.PollAnswer.PollId">
+            <summary>
+            Unique poll identifier
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.PollAnswer.User">
+            <summary>
+            The user, who changed the answer to the poll
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.PollAnswer.OptionIds">
+            <summary>
+            0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
             </summary>
         </member>
         <member name="T:Telegram.Bot.Types.PollOption">
@@ -7889,6 +8206,11 @@
             Optional. HTTP url to be opened when button is pressed
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton.LoginUrl">
+            <summary>
+            Optional. An HTTP URL used to automatically authorize the user
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton.CallbackData">
             <summary>
             Optional. Data to be sent in a callback query to the bot when button is pressed
@@ -7932,6 +8254,14 @@
             </summary>
             <param name="text">Label text on the button</param>
             <param name="url">HTTP url to be opened when button is pressed</param>
+        </member>
+        <member name="M:Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton.WithLoginUrl(System.String,Telegram.Bot.Types.LoginUrl)">
+            <summary>
+            Creates an inline keyboard button that opens a HTTP URL to automatically authorize the user
+            </summary>
+            <param name="text">Label text on the button</param>
+            <param name="loginUrl">An HTTP URL used to automatically authorize the user</param>
+            <returns></returns>
         </member>
         <member name="M:Telegram.Bot.Types.ReplyMarkups.InlineKeyboardButton.WithCallbackData(System.String)">
             <summary>
@@ -8067,6 +8397,11 @@
             If <c>true</c>, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.ReplyMarkups.KeyboardButton.RequestPoll">
+            <summary>
+            Optional. If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only
+            </summary>
+        </member>
         <member name="M:Telegram.Bot.Types.ReplyMarkups.KeyboardButton.#ctor">
             <summary>
             Initializes a new <see cref="T:Telegram.Bot.Types.ReplyMarkups.KeyboardButton"/>
@@ -8092,12 +8427,30 @@
             <param name="text">Button's text</param>
             <returns>Keyboard button</returns>
         </member>
+        <member name="M:Telegram.Bot.Types.ReplyMarkups.KeyboardButton.WithRequestPoll(System.String,System.String)">
+            <summary>
+            Generate a keyboard button to request a poll
+            </summary>
+            <param name="text">Button's text</param>
+            <param name="type">Poll's type</param>
+            <returns>Keyboard button</returns>
+        </member>
         <member name="M:Telegram.Bot.Types.ReplyMarkups.KeyboardButton.op_Implicit(System.String)~Telegram.Bot.Types.ReplyMarkups.KeyboardButton">
             <summary>
             Generate a keyboard button from text
             </summary>
             <param name="text">Button's text</param>
             <returns>Keyboard button</returns>
+        </member>
+        <member name="T:Telegram.Bot.Types.ReplyMarkups.KeyboardButtonPollType">
+            <summary>
+            This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.ReplyMarkups.KeyboardButtonPollType.Type">
+            <summary>
+            Optional. If quiz is passed, the user will be allowed to create only polls in the quiz mode. If regular is passed, only regular polls will be allowed. Otherwise, the user will be allowed to create a poll of any type
+            </summary>
         </member>
         <member name="T:Telegram.Bot.Types.ReplyMarkups.ReplyKeyboardMarkup">
             <summary>
@@ -8219,6 +8572,11 @@
             Sticker height
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.Sticker.IsAnimated">
+            <summary>
+            True, if the sticker is animated
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.Sticker.Thumb">
             <summary>
             Sticker thumbnail in .webp or .jpg format
@@ -8253,6 +8611,11 @@
         <member name="P:Telegram.Bot.Types.StickerSet.Title">
             <summary>
             Sticker set title
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.StickerSet.IsAnimated">
+            <summary>
+            True, if the sticker set contains animated stickers
             </summary>
         </member>
         <member name="P:Telegram.Bot.Types.StickerSet.ContainsMasks">
@@ -8330,6 +8693,11 @@
             New poll state. Bots receive only updates about polls, which are sent or stopped by the bot
             </summary>
         </member>
+        <member name="P:Telegram.Bot.Types.Update.PollAnswer">
+            <summary>
+            Optional. A user changed their answer in a non-anonymous poll. Bots receive new votes only in polls that were sent by the bot itself.
+            </summary>
+        </member>
         <member name="P:Telegram.Bot.Types.Update.Type">
             <summary>
             Gets the update type.
@@ -8371,6 +8739,21 @@
         <member name="P:Telegram.Bot.Types.User.LanguageCode">
             <summary>
             Optional. IETF language tag of the user's language
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.User.CanJoinGroups">
+            <summary>
+            Optional. True, if the bot can be invited to groups. Returned only in getMe
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.User.CanReadAllGroupMessages">
+            <summary>
+            Optional. True, if privacy mode is disabled for the bot. Returned only in getMe
+            </summary>
+        </member>
+        <member name="P:Telegram.Bot.Types.User.SupportsInlineQueries">
+            <summary>
+            Optional. True, if the bot supports inline queries. Returned only in getMe
             </summary>
         </member>
         <member name="M:Telegram.Bot.Types.User.Equals(System.Object)">
